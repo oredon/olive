@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="content-script-type" content="text/javascript" />
+<meta http-equiv="content-language" content="ja" />
+<title>util example</title>
+<link rel="stylesheet" href="../olive.css" />
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../olive.js"></script>
+<script>
+
+;(function($, window, document, undefined) {
+	$(function(){
+		var util = new Olive.Util();
+		$("#randint").click(function(e){
+			$( $(this).attr("href") ).val( util.randint(1,100));
+			e.preventDefault();
+			return false;
+		});
+		
+		$("#randfloat").click(function(e){
+			$( $(this).attr("href") ).val( util.randfloat(0,1));
+			e.preventDefault();
+			return false;
+		});
+		
+		$("#randbool").click(function(e){
+			$( $(this).attr("href") ).val( util.randbool());
+			e.preventDefault();
+			return false;
+		});
+		
+		console.log("isTouch:" + util.isTouch, " isLegacy:" + util.isLegacy)
+		
+		
+		
+		//util.randbool() 
+	});
+}(jQuery, this, this.document));
+</script>
+</head>
+<body>
+<h1>Olive.Util</h1>
+
+
+<h2>randint</h2>
+<p><a id="randint" href="#randintres">randint 1-100</a></p>
+<p><input id="randintres" type="text" name="a" value="" /></p>
+
+<hr />
+
+<h2>randfloat</h2>
+<p><a id="randfloat" href="#randfloatres">randfloat 0-1</a></p>
+<p><input id="randfloatres" type="text" name="b" value="" /></p>
+
+<hr />
+
+<h2>randbool</h2>
+<p><a id="randbool" href="#randboolres">randbool</a></p>
+<p><input id="randboolres" type="text" name="c" value="" /></p>
+
+
+
+
+
+
+</body>
+
+</html>

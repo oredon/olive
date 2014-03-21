@@ -1,0 +1,394 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="content-script-type" content="text/javascript" />
+<meta http-equiv="content-language" content="ja" />
+<title>ui example</title>
+<link rel="stylesheet" href="../olive.css" />
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../olive.js"></script>
+<script>
+/**
+ * UI example
+ */
+;(function($, window, document, undefined) {
+	$(function(){
+		var ui = new Olive.UI({
+			
+		});
+		ui.randomFadeMultipleElems();
+		
+		ui.flickable($('#scrollArea'));
+		
+		ui.simpleTab();
+		
+		ui.simpleAccordion();
+		
+		var closeTimer;//自動で閉じるコールバック関数で使う
+		var closeDuration = 2000;//閉じるまでの間隔（msec.）
+		
+		ui.simpleModalInit({
+			modalId: "simple_modal",
+			bgId: "simple_modal_bg",
+			duration: 0
+		});
+		//タグにモーダル処理をアタッチ
+		ui.simpleModalTag($(".openModalByTag"),{
+			closeSelector: ".simple_modal_close",   //閉じるアクションを付加するオブジェクトのセレクタ
+			duration: 300,                          //フェードイン・アウトの時間(webkitのみ)
+			modalWindowMarginTopMin: 10,            //モーダルの最小上マージン
+			modalWindowMarginSide: 10,              //モーダルの左右マージン
+			beforeShowContent: null,                //表示前に実行
+			afterShowContent: null,                 //表示後に実行
+			beforeHideContent: null,                //非表示前に実行
+			afterHideContent: null                 //非表示後に実行
+		});
+		
+		//タグにモーダル処理をアタッチ 別スタイル
+		ui.simpleModalTag($(".openModalByTag_s"),{
+			beforeShowContent:function($modalWrapper, $modalWindow, options, $trigger) {
+				//$("#simple_modal_bg").css("background","rgba(0,0,0,0.8)");
+				//自動クローズと干渉してしまう場合は以下を有効にする
+				//clearTimeout(closeTimer);
+			},
+			afterShowContent: function($modalWrapper, $modalWindow, options) {
+				
+			},
+			beforeHideContent: function($modalWrapper, $modalWindow, options) {
+				
+			},
+			afterHideContent:function($modalWrapper, $modalWindow, options){
+				//$("#simple_modal_bg").css("background","rgba(0,0,0,0)");
+			}
+		});
+		
+		//clickイベント内にモーダルオープン処理を書く
+		$(".openModalByManual").click(function(e){
+			ui.simpleModalOpen($("#modal02"), {
+				duration: 1000,
+				beforeShowContent:function($modalWrapper, $modalWindow, options, $trigger) {
+					//モーダルの文言を変更
+					$modalWindow.find("p:eq(0)").text("手動で呼び出しました。自動で閉じるようにしてます");
+				},
+				afterShowContent: function($modalWrapper, $modalWindow, options) {
+					closeTimer = setTimeout(function() { ui.simpleModalClose(); }, closeDuration);//timerで閉じる
+				},
+				beforeHideContent: function($modalWrapper, $modalWindow, options) {
+					if(closeTimer) clearTimeout(closeTimer);//timerリセット
+				},
+				afterHideContent:function($modalWrapper, $modalWindow, options){
+					
+				}
+			});
+			
+			e.preventDefault();
+			return false;
+		});
+		
+		/* ui.Ajax.exec({
+			url: "test.json"
+		}); */
+		
+	});
+}(jQuery, this, this.document));
+
+</script>
+</head>
+<body>
+<h1>Olive.UI</h1>
+<div id="container">
+
+<h2>randomFadeMultipleElems</h2>
+<div id="randomFade" style="height:100px;position:relative">
+<div class="random" style="width:100px;height:100px;background:#3cc;position:absolute;left:0;top:0;">&nbsp;</div>
+<div class="random" style="width:100px;height:100px;background:#c3c;position:absolute;left:100px;top:0;">&nbsp;</div>
+<div class="random" style="width:100px;height:100px;background:#cc3;position:absolute;left:200px;top:0;">&nbsp;</div>
+</div>
+
+<h2>simpleAccordion</h2>
+<div id="accordionWrp">
+<a href="#accordion1" class="closed accordionTrigger">開く</a>
+<div class="accordionContainer" id="accordion1">
+<ul>
+<li>XXXXXXX</li>
+<li>XXXXXXX</li>
+<li>XXXXXXX</li>
+<li>XXXXXXX</li>
+<li>XXXXXXX</li>
+<li>XXXXXXX</li>
+</ul>
+</div>
+<!-- accordionWrp --></div>
+
+<h2>flickable</h2>
+<div id="scrollArea" style="height:400px; overflow-y:scroll; width:200px; background:#eee;">
+<div id="triggerScroll">
+<pre style="width:500px;text-aling:left">テスト１
+テスト２
+テスト３
+テスト４
+テスト５
+テスト６
+テスト７
+テスト８
+テスト９
+テスト１０
+テスト１１
+テスト１２
+テスト１３
+テスト１４
+テスト１５
+テスト１６
+テスト１７
+テスト１８
+テスト１９
+テスト２０
+テスト２１
+テスト２２
+テスト２３
+テスト２４
+テスト２５
+テスト２６
+テスト２７
+テスト２８
+テスト２９
+テスト３０
+テスト３１
+テスト３２
+テスト３３
+テスト３４
+テスト３５
+テスト３６
+テスト３７
+テスト３８
+テスト３９
+テスト４０
+テスト４１
+テスト４２
+テスト４３
+テスト４４
+テスト４５
+テスト４６
+テスト４７
+テスト４８
+テスト４９
+テスト５０
+テスト５１
+テスト５２
+テスト５３
+テスト５４
+テスト５５
+テスト５６
+テスト５７
+テスト５８
+テスト５９
+テスト６０
+テスト６１
+テスト６２
+テスト６３
+テスト６４
+テスト６５
+テスト６６
+テスト６７
+テスト６８
+テスト６９
+テスト７０
+テスト７１
+テスト７２
+テスト７３
+テスト７４
+テスト７５
+テスト７６
+テスト７７
+テスト７８
+テスト７９
+テスト８０
+テスト８１
+テスト８２
+テスト８３
+テスト８４
+テスト８５
+テスト８６
+テスト８７
+テスト８８
+テスト８９
+テスト９０
+テスト９１
+テスト９２
+テスト９３
+テスト９４
+テスト９５
+テスト９６
+テスト９７
+テスト９８
+テスト９９
+テスト１００
+テスト１０１
+テスト１０２
+テスト１０３
+テスト１０４
+テスト１０５
+テスト１０６
+テスト１０７
+テスト１０８
+テスト１０９
+テスト１１０
+テスト１１１
+テスト１１２
+テスト１１３
+テスト１１４
+テスト１１５
+テスト１１６
+テスト１１７
+テスト１１８
+テスト１１９
+テスト１２０
+テスト１２１
+テスト１２２
+テスト１２３
+テスト１２４
+テスト１２５
+テスト１２６
+テスト１２７
+テスト１２８
+テスト１２９
+テスト１３０
+テスト１３１
+テスト１３２
+テスト１３３
+テスト１３４
+テスト１３５
+テスト１３６
+テスト１３７
+テスト１３８
+テスト１３９
+テスト１４０
+テスト１４１
+テスト１４２
+テスト１４３
+テスト１４４
+テスト１４５
+テスト１４６
+テスト１４７
+テスト１４８
+テスト１４９
+テスト１５０
+テスト１５１
+テスト１５２
+テスト１５３
+テスト１５４
+テスト１５５
+テスト１５６
+テスト１５７
+テスト１５８
+テスト１５９
+テスト１６０
+テスト１６１
+テスト１６２
+テスト１６３
+テスト１６４
+テスト１６５
+テスト１６６
+テスト１６７
+テスト１６８
+テスト１６９
+テスト１７０
+テスト１７１
+テスト１７２
+テスト１７３
+テスト１７４
+テスト１７５
+</pre>
+</div>
+</div><!--/#scrollArea-->
+
+<h2>simpleTab</h2>
+<div id="simpleTabWrp">
+<ul>
+<li><a href="#contA" class="simpleTabBtn">btn A</a></li>
+<li><a href="#contB" class="simpleTabBtn cur">btn B</a></li>
+<li><a href="#contC" class="simpleTabBtn">btn C</a></li>
+</ul>
+
+<div class="simpleTabContainer" id="contA">
+<p>contA です</p>
+</div>
+
+<div class="simpleTabContainer" id="contB">
+<p>contB です</p>
+<p>contB です</p>
+<p>contB です</p>
+</div>
+
+<div class="simpleTabContainer" id="contC">
+<p>contC です</p>
+<p>contC です</p>
+</div>
+
+</div>
+
+</div>
+
+
+
+<h1>タグにモーダルをはる</h1>
+<ul style="width:800px;">
+<li><a href="#modal01" class="openModalByTag">モーダルオープン</a></li>
+<li><a href="#modal01_s" class="openModalByTag_s">モーダルオープン(別スタイル)</a></li>
+</ul>
+
+<h1>clickイベント内にモーダルを呼び出す処理を書く（自動クローズ機能付き）</h1>
+<ul>
+<li><strong class="openModalByManual">ここをclick</strong></li>
+</ul>
+
+
+
+
+<!-- モーダル -->
+<div id="modal01" class="modalWrapper">
+<div class="modalWrapperInner">
+<div class="modalContents">
+<p>画面背景部分をどこかクリックすると閉じます</p>
+</div>
+<!-- modalWrapperInner --></div>
+<!-- modal01 --></div>
+
+
+<div id="modal01_s" class="modalWrapper">
+<div class="modalWrapperInner">
+
+<div style="width:300px;height:1000px;background:#eff;">
+<p>画面背景部分か閉じるボタンをクリックすると閉じます</p>
+<ul>
+<li>XXXXXXX</li><li>XXXXXXX</li><li>XXXXXXX</li><li>XXXXXXX</li>
+</ul>
+<p style="margin-top:20px;text-align:center;"><a href="#" class="simple_modal_close">閉じるボタン</a></p>
+</div>
+<p style="text-align:center;"><a href="#" class="simple_modal_close" style="color:#fff">外にだした閉じるボタン</a></p>
+<!-- modalWrapperInner --></div>
+<!-- modal01_s --></div>
+
+
+<div id="modal02" class="modalWrapper">
+<div class="modalWrapperInner">
+
+<div class="modalContents">
+<p>ダミーテキスト</p>
+</div>
+
+<!-- modalWrapperInner --></div>
+<!-- modal02 --></div>
+
+
+
+
+
+
+
+
+</body>
+
+</html>

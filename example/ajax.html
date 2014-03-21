@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="content-script-type" content="text/javascript" />
+<meta http-equiv="content-language" content="ja" />
+<title>ajax example</title>
+<link rel="stylesheet" href="../olive.css" />
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="../olive.js"></script>
+<script>
+
+/**
+ * Ajax example
+ */
+;(function($, window, document, undefined) {
+	$(function(){
+		var oli={}
+		oli.Ajax = new Olive.Ajax();
+		
+		$("#ex1").click(function(e){
+			$("#ex1res").html("");
+			//// -- deferredを使った例
+			var options = {
+				url: "test.json",
+				sendData: {
+					aaa:1//リクエストパラメータ
+				},
+				successHandler: function(res){
+					console.log(this,res);
+					$("#ex1res").append("ok ")
+				}
+			}
+			$.when( oli.Ajax.exec(options),oli.Ajax.exec(options),oli.Ajax.exec(options) ).done(function(a,b,c){
+				console.log( a,b,c )
+				$("#ex1res").append("<br>all ok")
+			}).fail(function(){
+				console.log("なんらかの失敗")
+			});
+			e.preventDefault();
+			return false;
+		});
+		
+		$("#ex2").click(function(e){
+			$("#ex2res").html("");
+			//// -- deferredを使わず、パラメタを関数内で書き換える例
+			oli.Ajax.exec({
+				url: "test.json",
+				successHandler: function(res){
+					$("#ex2res").append("ok");
+				},
+				errorHandler: function(){
+					$("#ex2res").append("ng");
+				},
+				sendData: {
+					aaa:1
+				}
+			});
+			e.preventDefault();
+			return false;
+		});
+
+
+		/**
+		 * extendの例
+		 */
+		var EXoli = {}
+		//Ajaxのオーバーライド
+		EXoli.Ajax = Olive.Ajax.extend({
+			init: function(){
+				this._super();
+				$("#ex3res").append("Extend init.");
+			}
+		});
+		
+		//インスタンス生成
+		var exoli = {}
+		exoli.Ajax = new EXoli.Ajax();
+		
+		$("#ex3").click(function(e){
+			$("#ex3res").html("");
+			//// -- deferredの例
+			var options = {
+				url: "test.json",
+				sendData: {
+					aaa:1
+				},
+				beforeHandler: function(){
+					$("#ex3res").append("EXBefore<br>");
+				},
+				successHandler: function(res){
+					$("#ex3res").append("EXok<br>");
+				}
+			}
+			$.when( exoli.Ajax.exec(options),exoli.Ajax.exec(options),exoli.Ajax.exec(options) ).done(function(a,b,c){
+				console.log("result all done", a,b,c )
+				$("#ex3res").append("<br>EXall ok");
+			}).fail(function(){
+				console.log("EX fail");
+			});
+			e.preventDefault();
+			return false;
+		});
+	});
+}(jQuery, this, this.document));
+</script>
+</head>
+<body>
+
+<p><a id="ex1" href="#">deferredを使った例</a></p>
+<p id="ex1res">&nbsp;</p>
+<hr />
+<p><a id="ex2" href="#">deferredを使わず、パラメタを関数内で書き換える例</a></p>
+<p id="ex2res">&nbsp;</p>
+<hr />
+<p><a id="ex3" href="#">extendの例</a></p>
+<p id="ex3res">&nbsp;</p>
+
+</body>
+</html>
